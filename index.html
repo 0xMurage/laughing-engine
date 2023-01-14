@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample player </title>
+</head>
+
+<body>
+
+    <button disabled="true" id="prev">Previous</button>
+    <button id="main">Play</button>
+    <button id="next">Next</button>
+
+
+    <script>
+        const playlistItems = [
+            '/audio/1.webm',
+            '/audio/2.m4a',
+            '/audio/4.m4a',
+            '/audio/3.m4a',
+        ];
+
+        const prevBtn = document.getElementById('prev');
+        const mainBtn = document.getElementById('main');
+        const nextBtn = document.getElementById('next');
+
+        const audioElem = new Audio(playlistItems[0]);
+
+        mainBtn.addEventListener('click', () => {
+            if (audioElem.paused) {
+                audioElem.play()
+                mainBtn.innerText = 'Pause';
+            } else {
+                audioElem.pause();
+                mainBtn.innerText = 'Play';
+            }
+        });
+
+        audioElem.addEventListener('ended', () => {
+            playPlaylistItem()
+        });
+
+        nextBtn.addEventListener('click', () => {
+            playPlaylistItem()
+        });
+
+        prevBtn.addEventListener('click', () => {
+            playPlaylistItem(false)
+        });
+
+
+
+
+        function playPlaylistItem(forwardDirection = true) {
+            const currentSrc = audioElem.src.replace(window.location.origin, '');
+            const index = playlistItems.findIndex((src) => src === currentSrc);
+
+            if (index === -1) {
+                //glitch in matrix
+                throw { status: 404, message: 'somethig kind' }
+            }
+
+
+            if (forwardDirection) {
+                if (playlistItems.length - 2 === index) {
+                    //only next song remaining in the playlist
+                    nextBtn.disabled = true;
+                }
+
+                audioElem.src = playlistItems[index + 1];
+                prevBtn.disabled = false;
+
+            } else {
+                audioElem.src = playlistItems[index - 1];
+
+                if (index === 1) {
+                    //only first song remaining in the playlist that direction
+                    prevBtn.disabled = true;
+                }
+                nextBtn.disabled = false;
+            }
+
+            audioElem.play();
+        }
+
+    </script>
+
+</body>
+
+</html>
