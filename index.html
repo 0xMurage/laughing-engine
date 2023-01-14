@@ -17,10 +17,10 @@
 
     <script>
         const playlistItems = [
-            '/audio/1.webm',
-            '/audio/2.m4a',
-            '/audio/4.m4a',
-            '/audio/3.m4a',
+            'audio/1.webm',
+            'audio/2.m4a',
+            'audio/4.m4a',
+            'audio/3.m4a',
         ];
 
         const prevBtn = document.getElementById('prev');
@@ -55,7 +55,7 @@
 
 
         function playPlaylistItem(forwardDirection = true) {
-            const currentSrc = audioElem.src.replace(window.location.origin, '');
+            const currentSrc = audioElem.src.replace(window.location.origin + window.location.pathname, '');
             const index = playlistItems.findIndex((src) => src === currentSrc);
 
             if (index === -1) {
